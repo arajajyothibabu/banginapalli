@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class SumPrimesSecondLargest {
 
     private String[] list;
@@ -18,10 +15,10 @@ public class SumPrimesSecondLargest {
     }
 
     private Long _compute(String sequence){
-        list = sequence.split(" ");
+        list = sequence.substring(0, sequence.length() - 1).split(" ");
         Long primes = 0L, firstMax = 0L, nextMax = 0L;
         for(String str : list){
-            Long n = Long.parseLong(str);
+            Long n = Long.parseLong(str.trim());
             if(isPrime(n)){
                 primes += 1;
                 if(n > firstMax){
@@ -32,8 +29,6 @@ public class SumPrimesSecondLargest {
                 }
             }
         }
-        System.out.println(primes);
-        System.out.println(nextMax);
         return nextMax + primes;
     }
 

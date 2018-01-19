@@ -32,7 +32,7 @@ public class MathExpEval {
     }
 
     private boolean isMorePrecedent(Character a, Character b){
-        return precedenceOfOperator.get(a) > precedenceOfOperator.get(b);
+        return precedenceOfOperator.get(a) >= precedenceOfOperator.get(b);
     }
 
     private Double evaluate(Double a, Double b, Character operator){
@@ -72,7 +72,7 @@ public class MathExpEval {
                 }
             }else if(isOperator(c)){
                 isNewOperandStart = true;
-                if(!operatorStack.isEmpty() && isMorePrecedent(operatorStack.peek(), c)){
+                while(!operatorStack.isEmpty() && isMorePrecedent(operatorStack.peek(), c) && !operatorStack.peek().equals(OPEN_BRACE)){
                     evalLastTwo();
                 }
                 operatorStack.push(c);
