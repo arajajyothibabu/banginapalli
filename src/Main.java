@@ -18,5 +18,10 @@ public class Main {
         sumPrimesSecondLargest.compute("233 2435 1123 109 103 4434 2347 993 880 1117 1801 991;");
         */
 
+        /*
+        PrisonBreak prisonBreak = new PrisonBreak(6, 6, new Integer[]{4}, new Integer[]{2});
+        PrisonBreak prisonBreak = new PrisonBreak(6, 6, new Integer[]{4}, new Integer[]{2, 3, 4});
+        */
+
     }
 }
