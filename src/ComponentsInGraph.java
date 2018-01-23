@@ -1,79 +1,35 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class Node {
 
-    public Integer value;
-    public ArrayList<Node> children;
+    public Integer label;
+    public ArrayList<Node> adjacencyList;
 
-    public Node(Integer value, ArrayList<Node> children) {
-        this.value = value;
-        this.children = children;
+    public Node(Integer label, ArrayList<Node> adjacencyList) {
+        this.label = label;
+        this.adjacencyList = adjacencyList;
     }
 
     public boolean contains(Integer value) {
-        if(this.value.equals(value)){
+        if(this.label.equals(value)){
             return true;
         }else{
-            for(Node node : children){
+            for(Node node : adjacencyList){
                 return node.contains(value);
             }
         }
         return false;
     }
 
-    public Node add(Integer start, Integer end){
-        if(value.equals(start)){
-            children.add(new Node(end, new ArrayList<Node>()));
-        }else if(value.equals(end)){
-            children.add(new Node(start, new ArrayList<Node>()));
-        }else{
-            for(Node child: children){
-                child.add(start, end);
-            }
-        }
-        return this;
-    }
-
-    public Node add(Node node){
-        children.add(node);
-        return this;
-    }
-
-    public Node addChildren(Node node){
-        children.add(node);
-        return this;
-    }
-
     public void print(){
-        System.out.println("Value: " + value + " >> " + (vertices().size() - 1));
-        for(Node child: children){
-            System.out.println("^");
-            child.print();
+        System.out.println("Label: " + label);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^");
+        for(Node child: adjacencyList){
+            System.out.print(child.label + "\t");
         }
-    }
-
-    public ArrayList<Integer> vertices(){
-        ArrayList<Integer> values = new ArrayList<Integer>();
-        values.add(this.value);
-        for(Node child: children){
-            for(Integer value : child.vertices()){
-                if(!value.equals(this.value)) {
-                    values.add(value);
-                }
-            }
-        }
-        return values;
-    }
-
-    public boolean isSubNode(Node node) {
-        ArrayList<Integer> vertices = vertices();
-        for (Integer value : node.vertices()) {
-            if(vertices.contains(value)){
-                return true;
-            }
-        }
-        return false;
+        System.out.println("\n^^^^^^^^^^^^^^^^^^^^^\n");
     }
 
 }
@@ -81,53 +37,58 @@ class Node {
 public class ComponentsInGraph {
 
     private Integer N;
-    private ArrayList<Node> roots;
+    private HashMap<Integer, Node> graph;
 
     public ComponentsInGraph() {
-        roots = new ArrayList<Node>();
+        graph = new HashMap<Integer, Node>();
     }
 
-    private void readInput() {
+    private void constructGraph() {
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt();
         for(int i = 0; i < N; i++){
             Integer start = sc.nextInt(), end = sc.nextInt();
-            if(roots.size() > 0){
-                for(Node root : roots){
-                    if(root.contains(start) || root.contains(end)){
-                        root.add(start, end);
-                        break;
-                    }
-                }
-                ArrayList<Node> children = new ArrayList<Node>();
-                children.add(new Node(end, new ArrayList<Node>()));
-                roots.add(new Node(start, children));
+            Node endNode;
+            if(graph.containsKey(end)){
+                endNode = graph.get(end);
+            }else{
+                endNode = new Node(end, new ArrayList<Node>());
+            }
+            if(graph.containsKey(start)){
+                graph.get(start).adjacencyList.add(endNode);
             }else{
                 ArrayList<Node> children = new ArrayList<Node>();
-                children.add(new Node(end, new ArrayList<Node>()));
-                roots.add(new Node(start, children));
-            }
-        }
-        for(Integer i = 0; i < roots.size(); i++){
-            for(Integer j = i + 1; j < roots.size(); j++){
-                if(roots.get(i).isSubNode(roots.get(j))){
-                    roots.get(i).add(roots.get(j));
-                    roots.remove(j);
-                }
+                children.add(endNode);
+                graph.put(start, new Node(start, children));
             }
         }
     }
 
-    private void printRoots(){
-        System.out.println(roots.size());
-        for(Node root: roots){
-            root.print();
+    private void printGraph(){
+        System.out.println("Size: " + graph.size());
+        for(Integer key : graph.keySet()){
+            graph.get(key).print();
         }
     }
 
     public void compute(){
-        readInput();
-        printRoots();
+        constructGraph();
+        if(graph.size() > 0){
+            //printGraph();
+            Integer min = 2, max = 0;
+            for(Integer key : graph.keySet()){
+                Integer vertices = graph.get(key).adjacencyList.size() + 1;
+                if(max < vertices){
+                    max = vertices;
+                }
+                if(min > vertices){
+                    min = vertices;
+                }
+            }
+            System.out.println(min + " " + max);
+        }else{
+            System.out.println(0 + " " + 0);
+        }
     }
 
 }
