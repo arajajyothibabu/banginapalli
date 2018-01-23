@@ -32,15 +32,68 @@ class Node {
         System.out.println("\n^^^^^^^^^^^^^^^^^^^^^\n");
     }
 
+    public ArrayList<Integer> connectedNodes(){
+        ArrayList<Integer> nodes = new ArrayList<Integer>();
+        nodes.add(label);
+        for(Node child : adjacencyList){
+            for(Integer label: child.connectedNodes()){
+                if(!nodes.contains(label)) {
+                    nodes.add(label);
+                }
+            }
+        }
+        return nodes;
+    }
+
+}
+
+class Graph extends HashMap<Integer, Node>{
+
+    public Graph() {}
+
+    public void add(Edge edge){
+        Integer start = edge.start, end = edge.end;
+        Node endNode;
+        if(this.containsKey(end)){
+            endNode = this.get(end);
+        }else{
+            endNode = new Node(end, new ArrayList<Node>());
+        }
+        if(this.containsKey(start)){
+            this.get(start).adjacencyList.add(endNode);
+        }else{
+            ArrayList<Node> children = new ArrayList<Node>();
+            children.add(endNode);
+            this.put(start, new Node(start, children));
+        }
+    }
+
+    public void print(){
+        System.out.println("Size: " + this.size());
+        for(Integer key : this.keySet()){
+            this.get(key).print();
+        }
+    }
+
+}
+
+class Edge {
+
+    public Integer start, end;
+
+    public Edge(Integer start, Integer end) {
+        this.start = start;
+        this.end = end;
+    }
 }
 
 public class ComponentsInGraph {
 
     private Integer N;
-    private HashMap<Integer, Node> graph;
+    private Graph graph;
 
     public ComponentsInGraph() {
-        graph = new HashMap<Integer, Node>();
+        graph = new Graph();
     }
 
     private void constructGraph() {
@@ -48,36 +101,49 @@ public class ComponentsInGraph {
         N = sc.nextInt();
         for(int i = 0; i < N; i++){
             Integer start = sc.nextInt(), end = sc.nextInt();
-            Node endNode;
-            if(graph.containsKey(end)){
-                endNode = graph.get(end);
-            }else{
-                endNode = new Node(end, new ArrayList<Node>());
-            }
-            if(graph.containsKey(start)){
-                graph.get(start).adjacencyList.add(endNode);
-            }else{
-                ArrayList<Node> children = new ArrayList<Node>();
-                children.add(endNode);
-                graph.put(start, new Node(start, children));
-            }
+            graph.add(new Edge(start, end));
         }
     }
 
-    private void printGraph(){
-        System.out.println("Size: " + graph.size());
-        for(Integer key : graph.keySet()){
-            graph.get(key).print();
+    private ArrayList<Integer> intersection(ArrayList<Integer> a, ArrayList<Integer> b){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for(Integer i : a){
+            if(b.contains(i)){
+                list.add(i);
+            }
         }
+        return list;
+    }
+
+    private ArrayList<Integer> union(ArrayList<Integer> a, ArrayList<Integer> b){
+        for(Integer i : a){
+            if(!b.contains(i)){
+                b.add(i);
+            }
+        }
+        return b;
     }
 
     public void compute(){
         constructGraph();
+        ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
         if(graph.size() > 0){
-            //printGraph();
+            //graph.print();
+            ArrayList<Integer> connected;
+            for(Integer key : graph.keySet()) {
+                connected = graph.get(key).connectedNodes();
+                list.add(connected);
+            }
+            for(Integer i = 0; i < list.size(); i++){
+                for(Integer j = i + 1; j < list.size(); j++){
+                    if(intersection(list.get(i), list.get(j)).size() > 0){
+                        list.set(i, union(list.get(i), list.get(j)));
+                    }
+                }
+            }
             Integer min = 2, max = 0;
-            for(Integer key : graph.keySet()){
-                Integer vertices = graph.get(key).adjacencyList.size() + 1;
+            for(ArrayList<Integer> nodes : list){
+                Integer vertices = nodes.size();
                 if(max < vertices){
                     max = vertices;
                 }
