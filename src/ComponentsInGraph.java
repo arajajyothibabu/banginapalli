@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -32,17 +33,27 @@ class Node {
         System.out.println("\n^^^^^^^^^^^^^^^^^^^^^\n");
     }
 
-    public ArrayList<Integer> connectedNodes(){
-        ArrayList<Integer> nodes = new ArrayList<Integer>();
-        nodes.add(label);
-        for(Node child : adjacencyList){
-            for(Integer label: child.connectedNodes()){
-                if(!nodes.contains(label)) {
-                    nodes.add(label);
+    public ArrayList<Integer> connectedNodes(ArrayList<Integer> accum){
+        if(!accum.contains(label)){
+            accum.add(label);
+            for(Node child : adjacencyList){
+                for(Integer label: child.connectedNodes(accum)){
+                    if(!accum.contains(label)) {
+                        accum.add(label);
+                    }
                 }
             }
         }
-        return nodes;
+        return accum;
+    }
+
+    public boolean hasChild(Integer label){
+        for(Node child : adjacencyList){
+            if(child.label.equals(label)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
@@ -102,55 +113,19 @@ public class ComponentsInGraph {
         for(int i = 0; i < N; i++){
             Integer start = sc.nextInt(), end = sc.nextInt();
             graph.add(new Edge(start, end));
+            graph.add(new Edge(end, start)); //adding reverse edge
         }
-    }
-
-    private ArrayList<Integer> intersection(ArrayList<Integer> a, ArrayList<Integer> b){
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for(Integer i : a){
-            if(b.contains(i)){
-                list.add(i);
-            }
-        }
-        return list;
-    }
-
-    private ArrayList<Integer> union(ArrayList<Integer> a, ArrayList<Integer> b){
-        for(Integer i : a){
-            if(!b.contains(i)){
-                b.add(i);
-            }
-        }
-        return b;
     }
 
     public void compute(){
         constructGraph();
-        ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
         if(graph.size() > 0){
             //graph.print();
-            ArrayList<Integer> connected;
+            ArrayList<Integer> list = new ArrayList<Integer>();
             for(Integer key : graph.keySet()) {
-                connected = graph.get(key).connectedNodes();
-                list.add(connected);
+                list.add(graph.get(key).connectedNodes(new ArrayList<Integer>()).size());
             }
-            for(Integer i = 0; i < list.size(); i++){
-                for(Integer j = i + 1; j < list.size(); j++){
-                    if(intersection(list.get(i), list.get(j)).size() > 0){
-                        list.set(i, union(list.get(i), list.get(j)));
-                    }
-                }
-            }
-            Integer min = 2, max = 0;
-            for(ArrayList<Integer> nodes : list){
-                Integer vertices = nodes.size();
-                if(max < vertices){
-                    max = vertices;
-                }
-                if(min > vertices){
-                    min = vertices;
-                }
-            }
+            Integer min = Collections.min(list), max = Collections.max(list);
             System.out.println(min + " " + max);
         }else{
             System.out.println(0 + " " + 0);
