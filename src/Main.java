@@ -1,5 +1,5 @@
-import trees.BinaryTree;
-import trees.Node;
+import trees.lib.BinaryTree;
+import trees.lib.Node;
 
 public class Main {
 
