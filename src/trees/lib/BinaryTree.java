@@ -2,6 +2,9 @@ package trees.lib;
 
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 public class BinaryTree extends Exception {
 
     private Node root;
@@ -10,19 +13,54 @@ public class BinaryTree extends Exception {
 
     public BinaryTree() { }
 
+    /**
+     *
+     * @param root
+     */
     public BinaryTree(Node root) {
         this.root = root;
         this.size++;
     }
 
+    /**
+     *
+     * @return root
+     */
+    public Node getRoot() {
+        return root;
+    }
+
+    /**
+     *
+     * @param root
+     */
+    public void setRoot(Node root) {
+        this.root = root;
+    }
+
+    /**
+     *
+     * @return {Boolean}
+     */
     public Boolean isEmpty(){
         return root == null;
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public Boolean contains(Integer value){
         return contains(root, value);
     }
 
+    /**
+     *
+     * @param node
+     * @param value
+     * @return
+     */
     private Boolean contains(Node node, Integer value){
         if(node != null){
             if(node.value.equals(value)){
@@ -34,6 +72,12 @@ public class BinaryTree extends Exception {
         return false;
     }
 
+    /**
+     *
+     * @param node
+     * @param value
+     * @return
+     */
     private Node find(Node node, Integer value){
         if(node != null){
             if(node.value.equals(value)){
@@ -45,22 +89,44 @@ public class BinaryTree extends Exception {
         return null;
     }
 
+    /**
+     *
+     * @param node
+     */
     public void insert(Node node){
         root = insert(root, node);
     }
 
+    /**
+     *
+     * @param value
+     */
     public void delete(Integer value){
         root = delete(root, value);
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     private Integer findMin(Node node){
         return node.left == null ? node.value : findMin(node.left);
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     private Integer findMax(Node node){
         return node.right == null ? node.value : findMin(node.right);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer min() {
         if(isEmpty()){
             throw new NoSuchElementException("Tree is Empty..!");
@@ -69,6 +135,10 @@ public class BinaryTree extends Exception {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer max(){
         if(isEmpty()){
             throw new NoSuchElementException("Tree is Empty..!");
@@ -77,6 +147,12 @@ public class BinaryTree extends Exception {
         }
     }
 
+    /**
+     *
+     * @param node
+     * @param value
+     * @return
+     */
     private Node delete(Node node, Integer value){
         if(node == null){
             return null;
@@ -101,11 +177,17 @@ public class BinaryTree extends Exception {
         return node;
     }
 
+    /**
+     *
+     * @param node
+     * @param newNode
+     * @return
+     */
     private Node insert(Node node, Node newNode){
         if(node == null){
             node = newNode;
             this.size++; //incrementing tree size
-        }else if(node.value < newNode.value){
+        }else if(node.value > newNode.value){
             node.left = insert(node.left, newNode);
         }else if(node.value < newNode.value){
             node.right = insert(node.right, newNode);
@@ -118,10 +200,17 @@ public class BinaryTree extends Exception {
      * Traversals
      */
 
+    /**
+     * InOrder [LCR]
+     */
     public void inOrder(){
         inOrder(root);
     }
 
+    /**
+     *
+     * @param node
+     */
     private void inOrder(Node node){
         if(node != null) {
             inOrder(node.left);
@@ -130,10 +219,17 @@ public class BinaryTree extends Exception {
         }
     }
 
+    /**
+     * PreOder [CLR]
+     */
     public void preOrder(){
         preOrder(root);
     }
 
+    /**
+     *
+     * @param node
+     */
     private void preOrder(Node node){
         if(node != null) {
             node.print();
@@ -142,10 +238,17 @@ public class BinaryTree extends Exception {
         }
     }
 
+    /**
+     * PostOrder [LRC]
+     */
     public void postOrder(){
         postOrder(root);
     }
 
+    /**
+     *
+     * @param node
+     */
     private void postOrder(Node node){
         if(node != null) {
             postOrder(node.left);
@@ -154,10 +257,19 @@ public class BinaryTree extends Exception {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getHeight(){
         return getHeight(root);
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     private Integer getHeight(Node node) {
         //return Math.round(Math.log(size + 1)); formula
         if(node == null){
@@ -166,9 +278,9 @@ public class BinaryTree extends Exception {
             Integer lHeight = getHeight(node.left);
             Integer rHeight = getHeight(node.right);
             if(lHeight > rHeight) {
-                return rHeight + 1;
-            } else {
                 return lHeight + 1;
+            } else {
+                return rHeight + 1;
             }
         }
     }

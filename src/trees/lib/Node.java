@@ -2,8 +2,8 @@ package trees.lib;
 
 public class Node {
 
-    Integer value;
-    Node left, right;
+    public Integer value;
+    public Node left, right;
 
     public Node(Integer value) {
         this.value = value;

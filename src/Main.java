@@ -34,20 +34,5 @@ public class Main {
 
         /*StronglyConnectedGroups stronglyConnectedGroups = new StronglyConnectedGroups(5, 7);
         stronglyConnectedGroups.compute();*/
-
-        BinaryTree binaryTree = new BinaryTree(new Node(16));
-        binaryTree.add(new Node(12));
-        binaryTree.add(new Node(18));
-        binaryTree.add(new Node(6));
-        binaryTree.add(new Node(13));
-        binaryTree.add(new Node(19));
-        Node root = binaryTree.getRoot();
-        //binaryTree.inOrder(root);
-        //binaryTree.preOrder(root);
-        //binaryTree.postOrder(root);
-        //binaryTree.levelOrderTraversal(root, 1);
-        System.out.println(binaryTree.size);
-        System.out.println(binaryTree.height(root));
-        binaryTree.levelOrderTraversal();
     }
 }
