@@ -97,13 +97,13 @@ public class LevelOrderTraversal {
 
         //levelOrderTraversal.printLevelOrder(binaryTree); //recursive method
 
-        levelOrderTraversal.printLevelByLevel(binaryTree);
+        //levelOrderTraversal.printLevelByLevel(binaryTree);
 
 
-        /*binaryTree.inOrder();
-        binaryTree.preOrder();
+        //binaryTree.inOrder();
+        //binaryTree.preOrder();
         binaryTree.postOrder();
-        System.out.println(binaryTree.getHeight());*/
+        //System.out.println(binaryTree.getHeight());
     }
 
 }
