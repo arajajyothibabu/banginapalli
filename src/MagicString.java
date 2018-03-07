@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Question
@@ -26,8 +25,8 @@ public class MagicString {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(MagicString.missingCharsToMakeMagicString("abceghijkmnopqruv"));
-        System.out.println(MagicString.missingCharsToMakeMagicString("I am from Bhimavaram"));
+        System.out.println(missingCharsToMakeMagicString("abceghijkmnopqruv"));
+        System.out.println(missingCharsToMakeMagicString("I am from Bhimavaram"));
     }
 
 }
