@@ -39,6 +39,12 @@ public class LevelOrderTraversal {
         }
     }
 
+    public void printLevelOrderUptoDepth(BinaryTree binaryTree, Integer depth){
+        for(Integer i = 1; i <= depth; i++){
+            printLevel(binaryTree.getRoot(), i);
+        }
+    }
+
     /**
      *
      * @param node {Node}
